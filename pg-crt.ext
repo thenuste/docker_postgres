@@ -1,0 +1,9 @@
+subjectAltName = @SANs
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid, issuer
+
+[ SANs ]
+DNS.1 = postgres
+DNS.2 = localhost
+IP.1 = <run command "ip a" to retrive the eth0 IP address and paste here>
+IP.2 = 127.0.0.1

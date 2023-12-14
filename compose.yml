@@ -1,0 +1,52 @@
+version: "3.7"
+services:
+  postgres-link:
+    image: postgres:15.4
+    hostname: postgres
+    environment:
+      POSTGRES_PASSWORD: 'Pgs3Cet'
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data-link:/var/lib/postgresql/data
+      - ./initdb.d:/docker-entrypoint-initdb.d:ro
+      - ./certs:/certs
+#    command: >
+#      -c ssl=on 
+#      -c ssl_cert_file=/var/lib/postgresql/data/server.crt 
+#      -c ssl_key_file=/var/lib/postgresql/data/server.key
+    healthcheck:
+      test: "pg_isready -q -d postgres -U postgres -t 3 || exit 1"
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  postgres-keycloak:
+    image: postgres:15.4
+    hostname: postgres
+    environment:
+      POSTGRES_PASSWORD: 'Pgs3Cet'
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg-data-keycloak:/var/lib/postgresql/data
+      - ./initdb.d:/docker-entrypoint-initdb.d:ro
+      - ./certs:/certs
+#    command: >
+#      -c ssl=on 
+#      -c ssl_cert_file=/var/lib/postgresql/data/server.crt 
+#      -c ssl_key_file=/var/lib/postgresql/data/server.key
+    healthcheck:
+      test: "pg_isready -q -d postgres -U postgres -t 3 || exit 1"
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+volumes:
+  pg-data-keycloak:
+    name: pg-data-keycloak
+  pg-data-link:
+    name: pg-data-link
